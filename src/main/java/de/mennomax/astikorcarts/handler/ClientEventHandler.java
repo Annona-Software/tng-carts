@@ -1,11 +1,5 @@
 package de.mennomax.astikorcarts.handler;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.entity.EntityCargoCart;
-import de.mennomax.astikorcarts.init.ModKeybindings;
-import de.mennomax.astikorcarts.packets.CPacketActionKey;
-import de.mennomax.astikorcarts.packets.CPacketOpenCartGui;
-import de.mennomax.astikorcarts.packets.CPacketToggleSlow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -15,6 +9,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.entity.EntityCargoCart;
+import de.mennomax.astikorcarts.init.ModKeybindings;
+import de.mennomax.astikorcarts.packets.CPacketActionKey;
+import de.mennomax.astikorcarts.packets.CPacketOpenCartGui;
+import de.mennomax.astikorcarts.packets.CPacketToggleSlow;
 
 @EventBusSubscriber(modid = AstikorCarts.MODID, value = {Side.CLIENT})
 public class ClientEventHandler
@@ -38,7 +39,7 @@ public class ClientEventHandler
             }
         }
     }
-    
+
     @SubscribeEvent
     public static void onGuiOpen(GuiOpenEvent event)
     {

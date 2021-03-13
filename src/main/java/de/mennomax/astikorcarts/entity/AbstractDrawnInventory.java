@@ -21,19 +21,7 @@ public abstract class AbstractDrawnInventory extends AbstractDrawn
     {
         super(worldIn);
     }
-    
-    /**
-     * Initializes an inventory with an IInventory wrapper.
-     * @param title the title of the inventory
-     * @param customName wether or not this inventory has a custom name
-     * @param size the size of the inventory.
-     */
-    protected void initInventory(String title, boolean customName, int size)
-    {
-        this.inventory = new InventoryBasic(title, customName, size);
-        this.itemHandler = new InvWrapper(this.inventory);
-    }
-    
+
     @Override
     public void onDestroyed(DamageSource source, boolean byCreativePlayer)
     {
@@ -43,7 +31,7 @@ public abstract class AbstractDrawnInventory extends AbstractDrawn
             InventoryHelper.dropInventoryItems(this.world, this, inventory);
         }
     }
-    
+
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound)
     {
@@ -75,7 +63,13 @@ public abstract class AbstractDrawnInventory extends AbstractDrawn
         }
         compound.setTag("Items", nbttaglist);
     }
-    
+
+    @Override
+    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    {
+        return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     @Nullable
@@ -88,10 +82,16 @@ public abstract class AbstractDrawnInventory extends AbstractDrawn
         return super.getCapability(capability, facing);
     }
 
-    @Override
-    public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing)
+    /**
+     * Initializes an inventory with an IInventory wrapper.
+     *
+     * @param title      the title of the inventory
+     * @param customName wether or not this inventory has a custom name
+     * @param size       the size of the inventory.
+     */
+    protected void initInventory(String title, boolean customName, int size)
     {
-        return capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+        this.inventory = new InventoryBasic(title, customName, size);
+        this.itemHandler = new InvWrapper(this.inventory);
     }
-
 }

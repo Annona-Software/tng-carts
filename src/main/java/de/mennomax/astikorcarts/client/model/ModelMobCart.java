@@ -1,24 +1,25 @@
 package de.mennomax.astikorcarts.client.model;
 
-import de.mennomax.astikorcarts.entity.EntityMobCart;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import de.mennomax.astikorcarts.entity.EntityMobCart;
+
 @SideOnly(Side.CLIENT)
 public class ModelMobCart extends ModelBase
 {
-    private ModelRenderer axis;
-    private ModelRenderer boardBottom;
-    private ModelRenderer shaft;
-    private ModelRenderer boardLeft;
-    private ModelRenderer boardRight;
-    private ModelRenderer boardBack;
-    private ModelRenderer boardFront;
-    private ModelRenderer leftWheel;
-    private ModelRenderer rightWheel;
+    private final ModelRenderer axis;
+    private final ModelRenderer boardBottom;
+    private final ModelRenderer shaft;
+    private final ModelRenderer boardLeft;
+    private final ModelRenderer boardRight;
+    private final ModelRenderer boardBack;
+    private final ModelRenderer boardFront;
+    private final ModelRenderer leftWheel;
+    private final ModelRenderer rightWheel;
 
     public ModelMobCart()
     {
@@ -55,7 +56,7 @@ public class ModelMobCart extends ModelBase
 
         this.boardFront = new ModelRenderer(this, 20, 28);
         this.boardFront.addBox(-9F, -5F, -15.5F, 18, 8, 2);
-        
+
         this.leftWheel = new ModelRenderer(this, 54, 21);
         this.leftWheel.setRotationPoint(14.5F, 5.0F, 1.0F);
         this.leftWheel.addBox(-2.0F, -1.0F, -1.0F, 1, 2, 2);
@@ -95,13 +96,13 @@ public class ModelMobCart extends ModelBase
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale)
     {
         this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale, entity);
-        
+
         this.leftWheel.rotateAngleX = ((EntityMobCart) entity).getWheelRotation();
         this.rightWheel.rotateAngleX = this.leftWheel.rotateAngleX;
 
         this.leftWheel.render(scale);
         this.rightWheel.render(scale);
-        
+
         this.axis.render(scale);
         this.boardBottom.render(scale);
         this.shaft.render(scale);

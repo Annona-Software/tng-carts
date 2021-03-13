@@ -1,6 +1,6 @@
 {
-    "parent": "minecraft:item/generated",
-    "textures": {
-        "layer0": "astikorcarts:items/plowcart"
-    }
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "astikorcarts:items/plowcart"
+  }
 }

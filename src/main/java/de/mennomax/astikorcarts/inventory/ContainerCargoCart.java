@@ -1,9 +1,10 @@
 package de.mennomax.astikorcarts.inventory;
 
-import de.mennomax.astikorcarts.entity.AbstractDrawn;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
+
+import de.mennomax.astikorcarts.entity.AbstractDrawn;
 
 public class ContainerCargoCart extends ContainerChest
 {
@@ -14,7 +15,7 @@ public class ContainerCargoCart extends ContainerChest
         super(playerInventory, chestInventory, player);
         this.drawn = drawn;
     }
-    
+
     @Override
     public boolean canInteractWith(EntityPlayer playerIn)
     {

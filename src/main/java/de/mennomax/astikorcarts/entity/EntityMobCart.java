@@ -1,7 +1,5 @@
 package de.mennomax.astikorcarts.entity;
 
-import de.mennomax.astikorcarts.config.ModConfig;
-import de.mennomax.astikorcarts.init.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +12,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import de.mennomax.astikorcarts.config.ModConfig;
+import de.mennomax.astikorcarts.init.ModItems;
+
 public class EntityMobCart extends AbstractDrawn
 {
 
@@ -23,7 +24,7 @@ public class EntityMobCart extends AbstractDrawn
         this.setSize(1.375F, 1.4F);
         this.spacing = 2.4D;
     }
-    
+
     @Override
     public boolean canBePulledBy(Entity pullingIn)
     {
@@ -40,37 +41,13 @@ public class EntityMobCart extends AbstractDrawn
         }
         return false;
     }
-    
-    @Override
-    public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
-    {
-        if (!this.world.isRemote)
-        {
-            if (player.isSneaking())
-            {
-               for (Entity entity : this.getPassengers())
-               {
-                   if (!(entity instanceof EntityPlayer))
-                   {
-                       entity.dismountRidingEntity();
-                       return true;
-                   }
-               }
-            }
-            else if(this.pulling != player)
-            {
-                player.startRiding(this);
-            }
-        }
-        return true;
-    }
 
     @Override
     public Item getCartItem()
     {
         return ModItems.MOBCART;
     }
-    
+
     @Override
     public void applyEntityCollision(Entity entity)
     {
@@ -87,17 +64,29 @@ public class EntityMobCart extends AbstractDrawn
             }
         }
     }
-    
-    protected boolean canFitPassenger(Entity passenger)
-    {
-        return this.getPassengers().size() < 2;
-    }
 
-    
     @Override
-    public double getMountedYOffset()
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
-        return 0.7D;
+        if (!this.world.isRemote)
+        {
+            if (player.isSneaking())
+            {
+                for (Entity entity : this.getPassengers())
+                {
+                    if (!(entity instanceof EntityPlayer))
+                    {
+                        entity.dismountRidingEntity();
+                        return true;
+                    }
+                }
+            }
+            else if (this.pulling != player)
+            {
+                player.startRiding(this);
+            }
+        }
+        return true;
     }
 
     @Override
@@ -106,7 +95,7 @@ public class EntityMobCart extends AbstractDrawn
         if (this.isPassenger(passenger))
         {
             double f = -0.1D;
-            
+
             if (this.getPassengers().size() > 1)
             {
                 f = this.getPassengers().indexOf(passenger) == 0 ? 0.2D : -0.6D;
@@ -117,9 +106,9 @@ public class EntityMobCart extends AbstractDrawn
                 }
             }
 
-            Vec3d vec3d = new Vec3d(f, 0.0D, 0.0D).rotateYaw(-this.rotationYaw * 0.017453292F - ((float)Math.PI / 2F));
+            Vec3d vec3d = new Vec3d(f, 0.0D, 0.0D).rotateYaw(-this.rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
             passenger.setPosition(this.posX + vec3d.x, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + vec3d.z);
-            
+
             if (!(passenger instanceof EntityPlayer))
             {
                 passenger.setRenderYawOffset(this.rotationYaw);
@@ -132,11 +121,22 @@ public class EntityMobCart extends AbstractDrawn
                 if (passenger instanceof EntityAnimal && this.getPassengers().size() > 1)
                 {
                     int j = passenger.getEntityId() % 2 == 0 ? 90 : 270;
-                    passenger.setRenderYawOffset(((EntityAnimal)passenger).renderYawOffset + (float)j);
-                    passenger.setRotationYawHead(passenger.getRotationYawHead() + (float)j);
+                    passenger.setRenderYawOffset(((EntityAnimal) passenger).renderYawOffset + (float) j);
+                    passenger.setRotationYawHead(passenger.getRotationYawHead() + (float) j);
                 }
             }
         }
+    }
+
+    @Override
+    public double getMountedYOffset()
+    {
+        return 0.7D;
+    }
+
+    protected boolean canFitPassenger(Entity passenger)
+    {
+        return this.getPassengers().size() < 2;
     }
 
 }

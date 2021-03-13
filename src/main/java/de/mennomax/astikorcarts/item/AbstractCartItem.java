@@ -1,10 +1,8 @@
 package de.mennomax.astikorcarts.item;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.entity.AbstractDrawn;
-import de.mennomax.astikorcarts.init.ModCreativeTabs;
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
@@ -15,17 +13,24 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public abstract class AbstractCartItem extends Item
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.entity.AbstractDrawn;
+import net.dries007.tfc.api.capability.size.Size;
+import net.dries007.tfc.api.capability.size.Weight;
+import net.dries007.tfc.objects.items.ItemTFC;
+
+import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
+
+public abstract class AbstractCartItem extends ItemTFC
 {
     public AbstractCartItem(String name)
     {
         this.setRegistryName(AstikorCarts.MODID, name);
         this.setUnlocalizedName(this.getRegistryName().toString());
-        this.setCreativeTab(ModCreativeTabs.astikor);
+        this.setCreativeTab(CT_MISC);
         this.setMaxStackSize(1);
     }
 
-    @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
@@ -44,7 +49,7 @@ public abstract class AbstractCartItem extends Item
                     cart.setPosition(result.hitVec.x, result.hitVec.y, result.hitVec.z);
                     cart.rotationYaw = (playerIn.rotationYaw + 180) % 360;
                     worldIn.spawnEntity(cart);
-                    
+
                     if (!playerIn.capabilities.isCreativeMode)
                     {
                         itemstack.shrink(1);
@@ -58,4 +63,18 @@ public abstract class AbstractCartItem extends Item
     }
 
     public abstract AbstractDrawn newCart(World worldIn);
+
+    @Nonnull
+    @Override
+    public Size getSize(@Nonnull ItemStack itemStack)
+    {
+        return Size.HUGE;
+    }
+
+    @Nonnull
+    @Override
+    public Weight getWeight(@Nonnull ItemStack itemStack)
+    {
+        return Weight.VERY_HEAVY;
+    }
 }

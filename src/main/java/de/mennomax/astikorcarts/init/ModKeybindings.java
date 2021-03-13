@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
@@ -21,5 +20,4 @@ public class ModKeybindings
             ClientRegistry.registerKeyBinding(bind);
         }
     }
-
 }

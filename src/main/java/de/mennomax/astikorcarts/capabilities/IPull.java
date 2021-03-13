@@ -4,7 +4,7 @@ import de.mennomax.astikorcarts.entity.AbstractDrawn;
 
 public interface IPull
 {
-    public void setDrawn(AbstractDrawn drawnIn);
+    AbstractDrawn getDrawn();
 
-    public AbstractDrawn getDrawn();
+    void setDrawn(AbstractDrawn drawnIn);
 }

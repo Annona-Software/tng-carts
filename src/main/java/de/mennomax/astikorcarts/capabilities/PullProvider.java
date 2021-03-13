@@ -10,7 +10,7 @@ public class PullProvider implements ICapabilityProvider
     @CapabilityInject(IPull.class)
     public static final Capability<IPull> PULL = null;
 
-    private IPull instance = PULL.getDefaultInstance();
+    private final IPull instance = PULL.getDefaultInstance();
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)

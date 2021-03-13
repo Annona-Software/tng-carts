@@ -1,12 +1,5 @@
 package de.mennomax.astikorcarts.init;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.client.render.RenderCargoCart;
-import de.mennomax.astikorcarts.client.render.RenderMobCart;
-import de.mennomax.astikorcarts.client.render.RenderPlowCart;
-import de.mennomax.astikorcarts.entity.EntityCargoCart;
-import de.mennomax.astikorcarts.entity.EntityMobCart;
-import de.mennomax.astikorcarts.entity.EntityPlowCart;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
@@ -17,9 +10,24 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.client.render.RenderCargoCart;
+import de.mennomax.astikorcarts.client.render.RenderMobCart;
+import de.mennomax.astikorcarts.client.render.RenderPlowCart;
+import de.mennomax.astikorcarts.entity.EntityCargoCart;
+import de.mennomax.astikorcarts.entity.EntityMobCart;
+import de.mennomax.astikorcarts.entity.EntityPlowCart;
+
 @ObjectHolder(AstikorCarts.MODID)
 public class ModEntities
 {
+    public static void registerRenders()
+    {
+        RenderingRegistry.registerEntityRenderingHandler(EntityCargoCart.class, RenderCargoCart::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityPlowCart.class, RenderPlowCart::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMobCart.class, RenderMobCart::new);
+    }
+
     @EventBusSubscriber(modid = AstikorCarts.MODID)
     public static class EntityRegistrationHandler
     {
@@ -29,9 +37,9 @@ public class ModEntities
         public static void registerEntities(RegistryEvent.Register<EntityEntry> event)
         {
             event.getRegistry().registerAll(
-                    createEntry(EntityCargoCart.class, "cargocart", 80, 3, false),
-                    createEntry(EntityPlowCart.class, "plowcart", 80, 3, false),
-                    createEntry(EntityMobCart.class, "mobcart", 80, 3, false)
+                createEntry(EntityCargoCart.class, "cargocart", 80, 3, false),
+                createEntry(EntityPlowCart.class, "plowcart", 80, 3, false),
+                createEntry(EntityMobCart.class, "mobcart", 80, 3, false)
             );
         }
 
@@ -40,12 +48,5 @@ public class ModEntities
             ResourceLocation resourceLocation = new ResourceLocation(AstikorCarts.MODID, name);
             return EntityEntryBuilder.create().entity(entityClass).id(resourceLocation, id++).name(resourceLocation.toString()).tracker(trackingRange, updateFrequency, sendVelocityUpdates).build();
         }
-    }
-
-    public static void registerRenders()
-    {
-        RenderingRegistry.registerEntityRenderingHandler(EntityCargoCart.class, RenderCargoCart::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityPlowCart.class, RenderPlowCart::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMobCart.class, RenderMobCart::new);
     }
 }

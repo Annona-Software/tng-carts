@@ -1,8 +1,5 @@
 package de.mennomax.astikorcarts.client.render;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.client.model.ModelPlowCart;
-import de.mennomax.astikorcarts.entity.EntityPlowCart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,6 +8,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.client.model.ModelPlowCart;
+import de.mennomax.astikorcarts.entity.EntityPlowCart;
 
 public class RenderPlowCart extends Render<EntityPlowCart>
 {
@@ -21,12 +22,6 @@ public class RenderPlowCart extends Render<EntityPlowCart>
     {
         super(renderManager);
         this.shadowSize = 0.6F;
-    }
-
-    @Override
-    protected ResourceLocation getEntityTexture(EntityPlowCart entity)
-    {
-        return TEXTURE;
     }
 
     @Override
@@ -44,35 +39,41 @@ public class RenderPlowCart extends Render<EntityPlowCart>
         }
 
         this.model.render(entity, partialTicks, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-        
+
         if (this.renderOutlines)
         {
             GlStateManager.disableOutlineMode();
             GlStateManager.disableColorMaterial();
         }
         GlStateManager.popMatrix();
-        
+
         // Render the tools on the plow
         for (int i = 0; i < entity.inventory.getSizeInventory(); i++)
         {
             GlStateManager.pushMatrix();
-            double offsetSides = 0.1D * ((i+1) & 1);
+            double offsetSides = 0.1D * ((i + 1) & 1);
             if (entity.getPlowing())
             {
-                GlStateManager.translate(x + (1.45D + offsetSides) * MathHelper.sin((-36.0F + entityYaw+i*36.0F) * 0.017453292F), y+0.10D, z - (1.45D + offsetSides) * MathHelper.cos((-36.0F + entityYaw+i*36.0F) * 0.017453292F));
-                GlStateManager.rotate(120.0F - entityYaw - 30.0F*i, 0.0F, 1.0F, 0.0F);
+                GlStateManager.translate(x + (1.45D + offsetSides) * MathHelper.sin((-36.0F + entityYaw + i * 36.0F) * 0.017453292F), y + 0.10D, z - (1.45D + offsetSides) * MathHelper.cos((-36.0F + entityYaw + i * 36.0F) * 0.017453292F));
+                GlStateManager.rotate(120.0F - entityYaw - 30.0F * i, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(181.0F, 0.0F, 0.0F, 1.0F);
             }
             else
             {
-                GlStateManager.translate(x + (1.9D + offsetSides) * MathHelper.sin((-34.7F + entityYaw+i*34.7F) * 0.017453292F), y+0.90D, z - (1.9D + offsetSides) * MathHelper.cos((-34.7F + entityYaw+i*34.7F) * 0.017453292F));
-                GlStateManager.rotate(120.0F - entityYaw - 30.0F*i, 0.0F, 1.0F, 0.0F);
+                GlStateManager.translate(x + (1.9D + offsetSides) * MathHelper.sin((-34.7F + entityYaw + i * 34.7F) * 0.017453292F), y + 0.90D, z - (1.9D + offsetSides) * MathHelper.cos((-34.7F + entityYaw + i * 34.7F) * 0.017453292F));
+                GlStateManager.rotate(120.0F - entityYaw - 30.0F * i, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(207.0F, 0.0F, 0.0F, 1.0F);
             }
-            Minecraft.getMinecraft().getRenderItem().renderItem(((EntityPlowCart) entity).getTool(i), ItemCameraTransforms.TransformType.FIXED);
+            Minecraft.getMinecraft().getRenderItem().renderItem(entity.getTool(i), ItemCameraTransforms.TransformType.FIXED);
             GlStateManager.popMatrix();
         }
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    }
+
+    @Override
+    protected ResourceLocation getEntityTexture(EntityPlowCart entity)
+    {
+        return TEXTURE;
     }
 
     public void setupRotation(float entityYaw)
@@ -85,5 +86,4 @@ public class RenderPlowCart extends Render<EntityPlowCart>
     {
         GlStateManager.translate(x, y + 1.0D, z);
     }
-
 }

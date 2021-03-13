@@ -2,15 +2,16 @@ package de.mennomax.astikorcarts.packets;
 
 import java.util.List;
 
-import de.mennomax.astikorcarts.capabilities.PullProvider;
-import de.mennomax.astikorcarts.entity.AbstractDrawn;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import de.mennomax.astikorcarts.capabilities.PullProvider;
+import de.mennomax.astikorcarts.entity.AbstractDrawn;
+import io.netty.buffer.ByteBuf;
 
 public class CPacketActionKey implements IMessage
 {
@@ -58,10 +59,10 @@ public class CPacketActionKey implements IMessage
                     }
                     if (closest.canBePulledBy(target))
                     {
-                        if(target.hasCapability(PullProvider.PULL, null))
+                        if (target.hasCapability(PullProvider.PULL, null))
                         {
                             AbstractDrawn drawn = target.getCapability(PullProvider.PULL, null).getDrawn();
-                            if(drawn != null && drawn.getPulling() == target)
+                            if (drawn != null && drawn.getPulling() == target)
                             {
                                 return;
                             }

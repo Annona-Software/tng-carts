@@ -1,8 +1,5 @@
 package de.mennomax.astikorcarts.handler;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.capabilities.PullProvider;
-import de.mennomax.astikorcarts.entity.ai.EntityAIPullCart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
@@ -10,6 +7,10 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.capabilities.PullProvider;
+import de.mennomax.astikorcarts.entity.ai.EntityAIPullCart;
 
 @EventBusSubscriber(modid = AstikorCarts.MODID)
 public class CommonEventHandler
@@ -24,7 +25,7 @@ public class CommonEventHandler
             event.addCapability(new ResourceLocation(AstikorCarts.MODID), new PullProvider());
         }
     }
-    
+
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event)
     {

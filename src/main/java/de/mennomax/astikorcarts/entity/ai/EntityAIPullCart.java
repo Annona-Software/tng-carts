@@ -1,8 +1,9 @@
 package de.mennomax.astikorcarts.entity.ai;
 
-import de.mennomax.astikorcarts.capabilities.PullProvider;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
+
+import de.mennomax.astikorcarts.capabilities.PullProvider;
 
 public class EntityAIPullCart extends EntityAIBase
 {
@@ -23,5 +24,5 @@ public class EntityAIPullCart extends EntityAIBase
         }
         return false;
     }
-    
+
 }

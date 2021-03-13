@@ -1,22 +1,23 @@
 package de.mennomax.astikorcarts.client.model;
 
-import de.mennomax.astikorcarts.entity.EntityPlowCart;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
+import de.mennomax.astikorcarts.entity.EntityPlowCart;
+
 public class ModelPlowCart extends ModelBase
 {
-    private ModelRenderer axis;
-    private ModelRenderer[] triangle = new ModelRenderer[3];
-    private ModelRenderer shaft;
-    private ModelRenderer shaftConnector;
-    private ModelRenderer[] plowShaftUpper = new ModelRenderer[3];
-    private ModelRenderer[] plowShaftLower = new ModelRenderer[3];
-    private ModelRenderer plowHandle;
-    private ModelRenderer plowHandleGrip;
-    private ModelRenderer leftWheel;
-    private ModelRenderer rightWheel;
+    private final ModelRenderer axis;
+    private final ModelRenderer[] triangle = new ModelRenderer[3];
+    private final ModelRenderer shaft;
+    private final ModelRenderer shaftConnector;
+    private final ModelRenderer[] plowShaftUpper = new ModelRenderer[3];
+    private final ModelRenderer[] plowShaftLower = new ModelRenderer[3];
+    private final ModelRenderer plowHandle;
+    private final ModelRenderer plowHandleGrip;
+    private final ModelRenderer leftWheel;
+    private final ModelRenderer rightWheel;
 
     public ModelPlowCart()
     {
@@ -53,13 +54,13 @@ public class ModelPlowCart extends ModelBase
         this.shaftConnector.addBox(-16.0F, 0.0F, 7.0F, 16, 2, 1);
 
         // --PLOW-SHAFT---------------------------------
-        for(int i = 0; i < this.plowShaftUpper.length; i++)
+        for (int i = 0; i < this.plowShaftUpper.length; i++)
         {
             this.plowShaftUpper[i] = new ModelRenderer(this, 56, 0);
             this.plowShaftUpper[i].addBox(-1.0F, -2.0F, -2.0F, 2, 30, 2);
-            this.plowShaftUpper[i].setRotationPoint(-3.0F+3*i, -7.0F, 0.0F);
+            this.plowShaftUpper[i].setRotationPoint(-3.0F + 3 * i, -7.0F, 0.0F);
             this.plowShaftUpper[i].rotateAngleY = -0.523599F + (float) Math.PI / 6.0F * i;
-            
+
             this.plowShaftLower[i] = new ModelRenderer(this, 42, 4);
             this.plowShaftLower[i].addBox(-1.0F, -0.7F, -0.7F, 2, 10, 2);
             this.plowShaftLower[i].setRotationPoint(0.0F, 28.0F, -1.0F);
@@ -140,19 +141,19 @@ public class ModelPlowCart extends ModelBase
 
         if (((EntityPlowCart) entity).getPlowing())
         {
-            for(ModelRenderer renderer : this.plowShaftUpper)
+            for (ModelRenderer renderer : this.plowShaftUpper)
             {
                 renderer.rotateAngleX = (float) Math.PI / 4.0F;
             }
         }
         else
         {
-            for(ModelRenderer renderer : this.plowShaftUpper)
+            for (ModelRenderer renderer : this.plowShaftUpper)
             {
                 renderer.rotateAngleX = (float) Math.PI / 2.5F;
             }
         }
-        for(ModelRenderer renderer : this.plowShaftUpper)
+        for (ModelRenderer renderer : this.plowShaftUpper)
         {
             renderer.render(scale);
         }

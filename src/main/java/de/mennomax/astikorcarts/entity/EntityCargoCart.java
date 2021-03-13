@@ -1,8 +1,5 @@
 package de.mennomax.astikorcarts.entity;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.config.ModConfig;
-import de.mennomax.astikorcarts.init.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,9 +14,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.config.ModConfig;
+import de.mennomax.astikorcarts.init.ModItems;
+
 public class EntityCargoCart extends AbstractDrawnInventory implements IInventoryChangedListener
 {
-    private static final DataParameter<Integer> CARGO = EntityDataManager.<Integer>createKey(EntityCargoCart.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> CARGO = EntityDataManager.createKey(EntityCargoCart.class, DataSerializers.VARINT);
 
     public EntityCargoCart(World worldIn)
     {
@@ -46,13 +47,20 @@ public class EntityCargoCart extends AbstractDrawnInventory implements IInventor
         }
         return false;
     }
-    
+
     @Override
     public Item getCartItem()
     {
         return ModItems.CARGOCART;
     }
-    
+
+    @Override
+    protected void entityInit()
+    {
+        super.entityInit();
+        this.dataManager.register(CARGO, 0);
+    }
+
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
     {
@@ -63,7 +71,7 @@ public class EntityCargoCart extends AbstractDrawnInventory implements IInventor
                 {
                     player.openGui(AstikorCarts.instance, 0, this.world, this.getEntityId(), 0, 0);
                 }
-                else if(this.pulling != player)
+                else if (this.pulling != player)
                 {
                     player.startRiding(this);
                 }
@@ -74,45 +82,24 @@ public class EntityCargoCart extends AbstractDrawnInventory implements IInventor
     }
 
     @Override
+    public void updatePassenger(Entity passenger)
+    {
+        if (this.isPassenger(passenger))
+        {
+            Vec3d vec3d = (new Vec3d(-0.68D, 0.0D, 0.0D)).rotateYaw(-this.rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
+            passenger.setPosition(this.posX + vec3d.x, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + vec3d.z);
+        }
+    }
+
+    @Override
     public double getMountedYOffset()
     {
         return 0.62D;
     }
 
-    @Override
-    public void updatePassenger(Entity passenger)
-    {
-        if (this.isPassenger(passenger))
-        {
-            Vec3d vec3d = (new Vec3d((double) -0.68D, 0.0D, 0.0D)).rotateYaw(-this.rotationYaw * 0.017453292F - ((float) Math.PI / 2F));
-            passenger.setPosition(this.posX + vec3d.x, this.posY + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + vec3d.z);
-        }
-    }
-    
     public int getCargo()
     {
         return this.dataManager.get(CARGO);
-    }
-
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound compound)
-    {
-        super.readEntityFromNBT(compound);
-        dataManager.set(CARGO, compound.getInteger("Cargo"));
-    }
-
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound compound)
-    {
-        super.writeEntityToNBT(compound);
-        compound.setInteger("Cargo", dataManager.get(CARGO));
-    }
-
-    @Override
-    protected void entityInit()
-    {
-        super.entityInit();
-        this.dataManager.register(CARGO, 0);
     }
 
     @Override
@@ -139,11 +126,25 @@ public class EntityCargoCart extends AbstractDrawnInventory implements IInventor
                 newValue = 1;
             else
                 newValue = 0;
-            if (this.dataManager.get(CARGO).intValue() != newValue)
+            if (this.dataManager.get(CARGO) != newValue)
             {
                 this.dataManager.set(CARGO, newValue);
             }
         }
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound)
+    {
+        super.readEntityFromNBT(compound);
+        dataManager.set(CARGO, compound.getInteger("Cargo"));
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound)
+    {
+        super.writeEntityToNBT(compound);
+        compound.setInteger("Cargo", dataManager.get(CARGO));
     }
 
 }

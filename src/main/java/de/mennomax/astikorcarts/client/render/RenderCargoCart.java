@@ -1,13 +1,14 @@
 package de.mennomax.astikorcarts.client.render;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.client.model.ModelCargoCart;
-import de.mennomax.astikorcarts.entity.EntityCargoCart;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.client.model.ModelCargoCart;
+import de.mennomax.astikorcarts.entity.EntityCargoCart;
 
 public class RenderCargoCart extends Render<EntityCargoCart>
 {
@@ -18,12 +19,6 @@ public class RenderCargoCart extends Render<EntityCargoCart>
     {
         super(renderManager);
         this.shadowSize = 1.0F;
-    }
-
-    @Override
-    protected ResourceLocation getEntityTexture(EntityCargoCart entity)
-    {
-        return TEXTURE;
     }
 
     @Override
@@ -49,6 +44,12 @@ public class RenderCargoCart extends Render<EntityCargoCart>
         }
         GlStateManager.popMatrix();
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    }
+
+    @Override
+    protected ResourceLocation getEntityTexture(EntityCargoCart entity)
+    {
+        return TEXTURE;
     }
 
     public void setupRotation(float entityYaw)

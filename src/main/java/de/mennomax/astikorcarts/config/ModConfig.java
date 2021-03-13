@@ -1,6 +1,5 @@
 package de.mennomax.astikorcarts.config;
 
-import de.mennomax.astikorcarts.AstikorCarts;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RangeDouble;
@@ -10,6 +9,8 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import de.mennomax.astikorcarts.AstikorCarts;
+
 @Config(modid = AstikorCarts.MODID)
 public class ModConfig
 {
@@ -17,43 +18,58 @@ public class ModConfig
     @RequiresMcRestart
     @RangeDouble(min = -1.0D, max = 0.0D)
     public static double speedModifier = -0.65D;
-    
+
     @LangKey("entity.astikorcarts:cargocart.name")
     public static CargoCart cargoCart = new CargoCart();
 
     @LangKey("entity.astikorcarts:plowcart.name")
     public static PlowCart plowCart = new PlowCart();
-    
+
     @LangKey("entity.astikorcarts:mobcart.name")
     public static MobCart mobCart = new MobCart();
 
     public static class CargoCart
     {
         public String[] canPull = {
-                "minecraft:horse",
-                "minecraft:donkey",
-                "minecraft:mule",
-                "minecraft:pig"
+            "minecraft:donkey",
+            "minecraft:horse",
+            "minecraft:mule",
+            "minecraft:pig",
+            "minecraft:player",
+            "tfc:cameltfc",
+            "tfc:donkeytfc",
+            "tfc:horsetfc",
+            "tfc:muletfc"
         };
     }
 
     public static class PlowCart
     {
         public String[] canPull = {
-                "minecraft:horse",
-                "minecraft:donkey",
-                "minecraft:mule",
-                "minecraft:pig"
+            "minecraft:donkey",
+            "minecraft:horse",
+            "minecraft:mule",
+            "minecraft:pig",
+            "minecraft:player",
+            "tfc:cameltfc",
+            "tfc:donkeytfc",
+            "tfc:horsetfc",
+            "tfc:muletfc"
         };
     }
-    
+
     public static class MobCart
     {
         public String[] canPull = {
-                "minecraft:horse",
-                "minecraft:donkey",
-                "minecraft:mule",
-                "minecraft:pig"
+            "minecraft:donkey",
+            "minecraft:horse",
+            "minecraft:mule",
+            "minecraft:pig",
+            "minecraft:player",
+            "tfc:cameltfc",
+            "tfc:donkeytfc",
+            "tfc:horsetfc",
+            "tfc:muletfc"
         };
     }
 

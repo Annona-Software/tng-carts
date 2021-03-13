@@ -1,16 +1,11 @@
 package de.mennomax.astikorcarts.entity;
 
-import de.mennomax.astikorcarts.AstikorCarts;
-import de.mennomax.astikorcarts.config.ModConfig;
-import de.mennomax.astikorcarts.init.ModItems;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
@@ -22,21 +17,32 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import de.mennomax.astikorcarts.AstikorCarts;
+import de.mennomax.astikorcarts.config.ModConfig;
+import de.mennomax.astikorcarts.init.ModItems;
+import net.dries007.tfc.api.types.Metal;
+import net.dries007.tfc.api.types.Rock;
+import net.dries007.tfc.objects.blocks.BlockPlacedItemFlat;
+import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
+import net.dries007.tfc.objects.items.metal.ItemMetalHoe;
+import net.dries007.tfc.objects.items.metal.ItemMetalTool;
+
 public class EntityPlowCart extends AbstractDrawnInventory implements IInventoryChangedListener
 {
-    private static final DataParameter<Boolean> PLOWING = EntityDataManager.<Boolean>createKey(EntityPlowCart.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> PLOWING = EntityDataManager.createKey(EntityPlowCart.class, DataSerializers.BOOLEAN);
     private static final double BLADEOFFSET = 1.7D;
     @SuppressWarnings("rawtypes")
     private static final DataParameter[] TOOLS = {
-            EntityDataManager.<ItemStack>createKey(EntityPlowCart.class, DataSerializers.ITEM_STACK),
-            EntityDataManager.<ItemStack>createKey(EntityPlowCart.class, DataSerializers.ITEM_STACK),
-            EntityDataManager.<ItemStack>createKey(EntityPlowCart.class, DataSerializers.ITEM_STACK)
+        EntityDataManager.createKey(EntityPlowCart.class, DataSerializers.ITEM_STACK),
+        EntityDataManager.createKey(EntityPlowCart.class, DataSerializers.ITEM_STACK),
+        EntityDataManager.createKey(EntityPlowCart.class, DataSerializers.ITEM_STACK)
     };
-    
+
     public EntityPlowCart(World worldIn)
     {
         super(worldIn);
@@ -63,12 +69,23 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
         return false;
     }
 
-    public boolean getPlowing()
+    public Item getCartItem()
     {
-        return this.dataManager.get(PLOWING);
+        return ModItems.PLOWCART;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
+    protected void entityInit()
+    {
+        super.entityInit();
+        this.dataManager.register(PLOWING, false);
+        for (int i = 0; i < TOOLS.length; i++)
+        {
+            this.dataManager.register(TOOLS[i], ItemStack.EMPTY);
+        }
+    }
+
     public void onUpdate()
     {
         super.onUpdate();
@@ -79,11 +96,11 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
             {
                 for (int i = 0; i < this.inventory.getSizeInventory(); i++)
                 {
-                    if(inventory.getStackInSlot(i) != ItemStack.EMPTY)
+                    if (inventory.getStackInSlot(i) != ItemStack.EMPTY)
                     {
-                        float offset = 38.0F+i*-38.0F;
-                        double blockPosX = this.posX + MathHelper.sin((this.rotationYaw-offset) * 0.017453292F) * BLADEOFFSET;
-                        double blockPosZ = this.posZ - MathHelper.cos((this.rotationYaw-offset) * 0.017453292F) * BLADEOFFSET;
+                        float offset = 38.0F + i * -38.0F;
+                        double blockPosX = this.posX + MathHelper.sin((this.rotationYaw - offset) * 0.017453292F) * BLADEOFFSET;
+                        double blockPosZ = this.posZ - MathHelper.cos((this.rotationYaw - offset) * 0.017453292F) * BLADEOFFSET;
                         BlockPos blockPos = new BlockPos(blockPosX, this.posY - 0.5D, blockPosZ);
                         BlockPos upPos = blockPos.up();
                         Material upMaterial = this.world.getBlockState(upPos).getMaterial();
@@ -91,7 +108,7 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
                         {
                             handleTool(blockPos, i, player);
                         }
-                        else if (upMaterial == Material.PLANTS || upMaterial == Material.VINE)
+                        else if (upMaterial == Material.PLANTS || upMaterial == Material.VINE || this.world.getBlockState(upPos).getBlock() instanceof BlockPlacedItemFlat)
                         {
                             this.world.destroyBlock(upPos, false);
                             handleTool(blockPos, i, player);
@@ -101,11 +118,23 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
             }
         }
     }
-    
-    @Override
-    public Item getCartItem()
+
+    public boolean getPlowing()
     {
-        return ModItems.PLOWCART;
+        return this.dataManager.get(PLOWING);
+    }
+
+    @Override
+    public void onInventoryChanged(IInventory invBasic)
+    {
+        for (int i = 0; i < TOOLS.length; ++i)
+        {
+            if (this.dataManager.get(TOOLS[i]) != invBasic.getStackInSlot(i))
+            {
+                this.dataManager.set(TOOLS[i], this.inventory.getStackInSlot(i));
+            }
+        }
+
     }
 
     @Override
@@ -126,12 +155,18 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
     }
 
     @SuppressWarnings("unchecked")
+    public ItemStack getTool(int i)
+    {
+        return (ItemStack) this.dataManager.get(TOOLS[i]);
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound)
     {
         super.readEntityFromNBT(compound);
         dataManager.set(PLOWING, compound.getBoolean("Plowing"));
-        for(int i = 0; i < TOOLS.length; i++)
+        for (int i = 0; i < TOOLS.length; i++)
         {
             this.dataManager.set(TOOLS[i], this.inventory.getStackInSlot(i));
         }
@@ -144,84 +179,64 @@ public class EntityPlowCart extends AbstractDrawnInventory implements IInventory
         compound.setBoolean("Plowing", dataManager.get(PLOWING));
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void entityInit()
-    {
-        super.entityInit();
-        this.dataManager.register(PLOWING, false);
-        for(int i = 0; i < TOOLS.length; i++)
-        {
-            this.dataManager.register(TOOLS[i], ItemStack.EMPTY);
-        }
-    }
-    
-    private void handleTool(BlockPos pos, int slot, EntityPlayer player)
-    {
-        IBlockState state = this.world.getBlockState(pos);
-        Block block = state.getBlock();
-        ItemStack itemstack = this.inventory.getStackInSlot(slot);
-        if (itemstack.getItem() instanceof ItemHoe)
-        {
-            if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
-            {
-                this.world.setBlockState(pos, Blocks.FARMLAND.getDefaultState(), 11);
-                damageAndUpdateOnBreak(slot, itemstack, player);
-            }
-            
-            else if (block == Blocks.DIRT)
-            {
-                switch (state.getValue(BlockDirt.VARIANT))
-                {
-                case DIRT:
-                    this.world.setBlockState(pos, Blocks.FARMLAND.getDefaultState(), 11);
-                    damageAndUpdateOnBreak(slot, itemstack, player);
-                    break;
-                case COARSE_DIRT:
-                    this.world.setBlockState(pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT), 11);
-                    damageAndUpdateOnBreak(slot, itemstack, player);
-                    break;
-                default:
-                    break;
-                }
-            }
-        }
-        else if (itemstack.getItem() instanceof ItemSpade)
-        {
-            if (block == Blocks.GRASS)
-            {
-                this.world.setBlockState(pos, Blocks.GRASS_PATH.getDefaultState());
-                damageAndUpdateOnBreak(slot, itemstack, player);
-            }
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-    private void damageAndUpdateOnBreak(int slot, ItemStack itemstack, EntityPlayer player)
+    private void damageAndUpdateOnBreak(BlockPos pos, int slot, ItemStack itemstack, EntityPlayer player)
     {
         itemstack.damageItem(1, player);
         if (itemstack.isEmpty())
         {
             this.dataManager.set(TOOLS[slot], ItemStack.EMPTY);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onInventoryChanged(IInventory invBasic)
-    {
-        for(int i = 0; i < TOOLS.length; i++)
-        {
-            if (this.dataManager.get(TOOLS[i]) != invBasic.getStackInSlot(i))
+            if (!world.isRemote)
             {
-                this.dataManager.set(TOOLS[i], this.inventory.getStackInSlot(i));
+                world.playSound(null, pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }
         }
+
     }
 
-    @SuppressWarnings("unchecked")
-    public ItemStack getTool(int i)
+    private void handleTool(BlockPos pos, int slot, EntityPlayer player)
     {
-        return (ItemStack) this.dataManager.get(TOOLS[i]);
+        IBlockState state = this.world.getBlockState(pos);
+        ItemStack itemstack = this.inventory.getStackInSlot(slot);
+        Item item = itemstack.getItem();
+
+        if (state.getBlock() instanceof BlockRockVariant)
+        {
+            BlockRockVariant blockRock = (BlockRockVariant) state.getBlock();
+            if (blockRock.getType() == Rock.Type.GRASS || blockRock.getType() == Rock.Type.DIRT || blockRock.getType() == Rock.Type.DRY_GRASS)
+            {
+                if (item instanceof ItemHoe || item instanceof ItemMetalHoe)
+                {
+                    if (!world.isRemote)
+                    {
+                        world.playSound(null, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        world.setBlockState(pos, BlockRockVariant.get(blockRock.getRock(), Rock.Type.FARMLAND).getDefaultState());
+                        damageAndUpdateOnBreak(pos, slot, itemstack, player);
+
+                    }
+                }
+                else if (itemstack.getItem() instanceof ItemMetalTool)  //All the metal tools
+                {
+                    ItemMetalTool metaltool = (ItemMetalTool) itemstack.getItem();
+                    if (metaltool.getType() == Metal.ItemType.SHOVEL)
+                    {
+                        if (!world.isRemote)
+                        {
+                            world.playSound(null, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                            this.world.setBlockState(pos, BlockRockVariant.get(blockRock.getRock(), Rock.Type.PATH).getDefaultState());
+                            this.damageAndUpdateOnBreak(pos, slot, itemstack, player);
+                        }
+                    }
+                }
+                else if (itemstack.getItem() instanceof ItemSpade) //Gets the stone tools
+                {
+                    if (!world.isRemote)
+                    {
+                        world.playSound(null, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                        this.world.setBlockState(pos, BlockRockVariant.get(blockRock.getRock(), Rock.Type.PATH).getDefaultState());
+                        this.damageAndUpdateOnBreak(pos, slot, itemstack, player);
+                    }
+                }
+            }
+        }
     }
 }

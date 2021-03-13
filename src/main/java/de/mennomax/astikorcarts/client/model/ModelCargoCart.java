@@ -1,27 +1,28 @@
 package de.mennomax.astikorcarts.client.model;
 
-import de.mennomax.astikorcarts.entity.EntityCargoCart;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
+import de.mennomax.astikorcarts.entity.EntityCargoCart;
+
 public class ModelCargoCart extends ModelBase
 {
-    private ModelRenderer boardBottom;
-    private ModelRenderer axis;
-    private ModelRenderer shaft;
-    private ModelRenderer boardFront;
-    private ModelRenderer[] boardsSide = new ModelRenderer[4];
-    private ModelRenderer[] boardsRear = new ModelRenderer[2];
-    private ModelRenderer[] cargo = new ModelRenderer[4];
-    private ModelRenderer leftWheel;
-    private ModelRenderer rightWheel;
+    private final ModelRenderer boardBottom;
+    private final ModelRenderer axis;
+    private final ModelRenderer shaft;
+    private final ModelRenderer boardFront;
+    private final ModelRenderer[] boardsSide = new ModelRenderer[4];
+    private final ModelRenderer[] boardsRear = new ModelRenderer[2];
+    private final ModelRenderer[] cargo = new ModelRenderer[4];
+    private final ModelRenderer leftWheel;
+    private final ModelRenderer rightWheel;
 
     public ModelCargoCart()
     {
         this.textureWidth = 128;
         this.textureHeight = 64;
-        
+
         // --BOTTOM-BOARD--------------------------------------
         this.boardBottom = new ModelRenderer(this, 0, 0);
         this.boardBottom.addBox(-14.5F, -11.0F, 3.0F, 29, 22, 1);

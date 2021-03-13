@@ -11,12 +11,11 @@ public class PullStorage implements IStorage<IPull>
     public NBTBase writeNBT(Capability<IPull> capability, IPull instance, EnumFacing side)
     {
         return null;
-        
     }
 
     @Override
     public void readNBT(Capability<IPull> capability, IPull instance, EnumFacing side, NBTBase nbt)
     {
-        
+
     }
 }
