@@ -15,11 +15,10 @@ import net.minecraft.world.World;
 
 import de.mennomax.astikorcarts.AstikorCarts;
 import de.mennomax.astikorcarts.entity.AbstractDrawn;
+import de.mennomax.astikorcarts.init.ModCreativeTabs;
 import net.dries007.tfc.api.capability.size.Size;
 import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.objects.items.ItemTFC;
-
-import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
 
 public abstract class AbstractCartItem extends ItemTFC
 {
@@ -27,7 +26,7 @@ public abstract class AbstractCartItem extends ItemTFC
     {
         this.setRegistryName(AstikorCarts.MODID, name);
         this.setUnlocalizedName(this.getRegistryName().toString());
-        this.setCreativeTab(CT_MISC);
+        this.setCreativeTab(ModCreativeTabs.astikor);
         this.setMaxStackSize(1);
     }
 
