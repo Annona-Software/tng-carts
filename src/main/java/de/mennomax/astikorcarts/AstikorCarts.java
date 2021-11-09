@@ -21,7 +21,7 @@ import de.mennomax.astikorcarts.proxy.IProxy;
 public class AstikorCarts
 {
     public static final String MODID = "astikorcarts";
-    public static final String VERSION = "tfc-1.12.2-0.1.2.8";
+    public static final String VERSION = "tfc-1.12.2-0.1.2.9";
 
     @SidedProxy(clientSide = "de.mennomax.astikorcarts.proxy.ClientProxy", serverSide = "de.mennomax.astikorcarts.proxy.ServerProxy")
     public static IProxy proxy;

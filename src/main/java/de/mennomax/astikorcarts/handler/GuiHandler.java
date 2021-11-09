@@ -2,13 +2,13 @@ package de.mennomax.astikorcarts.handler;
 
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import de.mennomax.astikorcarts.client.gui.inventory.GuiPlow;
 import de.mennomax.astikorcarts.entity.EntityCargoCart;
 import de.mennomax.astikorcarts.entity.EntityPlowCart;
+import de.mennomax.astikorcarts.inventory.ContainerCargoCart;
 import de.mennomax.astikorcarts.inventory.ContainerPlowCart;
 
 public class GuiHandler implements IGuiHandler
@@ -16,17 +16,18 @@ public class GuiHandler implements IGuiHandler
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z)
     {
+        EntityCargoCart cart;
+        EntityPlowCart plow;
         switch (id)
         {
             case 0:
-                EntityCargoCart cart = (EntityCargoCart) world.getEntityByID(x);
-                return new ContainerChest(player.inventory, cart.inventory, player);
+                cart = (EntityCargoCart) world.getEntityByID(x);
+                return new ContainerCargoCart(player.inventory, cart.inventory, cart, player);
             case 1:
-                EntityPlowCart plow = (EntityPlowCart) world.getEntityByID(x);
+                plow = (EntityPlowCart) world.getEntityByID(x);
                 return new ContainerPlowCart(player.inventory, plow.inventory, plow, player);
-            default:
-                return null;
         }
+        return null;
     }
 
     @Override

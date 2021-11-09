@@ -18,7 +18,6 @@ import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -229,19 +228,17 @@ public abstract class AbstractDrawn extends Entity implements IEntityAdditionalS
     {
         if (this.pulling != null)
         {
+            if (this.pulling.isRiding())
+                return true;
             if (this.collidedHorizontally)
             {
-                RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + this.height, this.posZ), new Vec3d(this.pulling.posX, this.pulling.posY + this.height / 2, this.pulling.posZ), false, true, false);
+                RayTraceResult result = this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + this.height, this.posZ), new Vec3d(this.pulling.posX, this.pulling.posY + (this.height / 2.0F), this.pulling.posZ), false, true, false);
                 if (result != null)
-                {
-                    if (result.typeOfHit == Type.BLOCK)
-                    {
+                    if (result.typeOfHit == RayTraceResult.Type.BLOCK)
                         return true;
-                    }
-                }
             }
         }
-        return false || this.pulling.isDead;
+        return this.pulling.isDead;
     }
 
     @Override
